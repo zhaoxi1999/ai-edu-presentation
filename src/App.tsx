@@ -345,14 +345,12 @@ export default function App() {
                   <div><strong>Memory</strong><br /><span style={{ color: 'var(--text-secondary)', fontSize: 'var(--small-size)' }}>状态与长期记忆</span></div>
                 </div>
               </div>
-              <div style={{ flex: 1, minWidth: '400px', background: '#fff', borderRadius: '12px', padding: '1rem', boxShadow: '0 10px 40px rgba(0,0,0,0.5)' }}>
-                <a href="https://www.star-history.com/#openclaw/openclaw&microsoft/vscode&pytorch/pytorch&torvalds/linux&thealgorithms/python&type=date&legend=top-left" target="_blank" rel="noopener noreferrer">
-                  <img
-                    alt="Star History Chart"
-                    src="https://api.star-history.com/svg?repos=openclaw/openclaw,microsoft/vscode,pytorch/pytorch,torvalds/linux,thealgorithms/python&type=date&legend=top-left"
-                    style={{ width: '100%', display: 'block', borderRadius: '8px' }}
-                  />
-                </a>
+              <div style={{ flex: 1, minWidth: '400px', background: 'transparent', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.5)', border: '1px solid rgba(0, 255, 204, 0.3)' }}>
+                <img
+                  alt="Star History Chart"
+                  src="/resource/starhistory.png"
+                  style={{ width: '100%', display: 'block' }}
+                />
               </div>
             </div>
           </div>
