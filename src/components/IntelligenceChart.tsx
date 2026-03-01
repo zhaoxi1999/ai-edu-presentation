@@ -10,7 +10,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
-const data = [
+const rawData = [
   { date: '2022-11', 'GPT-5.3 Codex': 9 },
   { date: '2023-03', 'GPT-5.3 Codex': 13, 'Claude Opus 4.6 Adaptive': 7 },
   { date: '2023-05', 'Gemini 3.1 Pro Preview': 9 },
@@ -43,6 +43,28 @@ const data = [
   { date: '2026-03', 'GPT-5.3 Codex': 54, 'Gemini 3.1 Pro Preview': 57, 'Gemini 3 Pro': 52, 'DeepSeek-R1': 50, 'Kimi k2.5': 50, 'MiniMax-m2.5': 43, 'GLM-5': 45, 'DeepSeek-V3.2 Reasoning': 48 },
 ];
 
+// 自动生成从 2022-11 到 2026-03 的连续月份数据
+const months: string[] = [];
+let currYear = 2022;
+let currMonth = 11;
+const endYear = 2026;
+const endMonth = 3;
+
+while (currYear < endYear || (currYear === endYear && currMonth <= endMonth)) {
+  const monthStr = `${currYear}-${String(currMonth).padStart(2, '0')}`;
+  months.push(monthStr);
+  currMonth++;
+  if (currMonth > 12) {
+    currMonth = 1;
+    currYear++;
+  }
+}
+
+const data = months.map(m => {
+  const entry = rawData.find(d => d.date === m);
+  return entry || { date: m };
+});
+
 const formatXAxis = (tickItem: string) => {
   const [year, month] = tickItem.split('-');
   const shortYear = year.slice(2);
@@ -67,12 +89,12 @@ export default function IntelligenceChart() {
         {payload.map((entry: any, index: number) => {
           const isHidden = hiddenLines[entry.dataKey];
           return (
-            <li 
-              key={`item-${index}`} 
-              style={{ 
-                cursor: 'pointer', 
-                display: 'flex', 
-                alignItems: 'center', 
+            <li
+              key={`item-${index}`}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
                 gap: '6px',
                 opacity: isHidden ? 0.4 : 1,
                 transition: 'opacity 0.2s ease'
@@ -96,8 +118,8 @@ export default function IntelligenceChart() {
           margin={{ top: 20, right: 40, left: 10, bottom: 40 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={true} />
-          <XAxis 
-            dataKey="date" 
+          <XAxis
+            dataKey="date"
             tickFormatter={formatXAxis}
             stroke="rgba(255,255,255,0.5)"
             tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 11 }}
@@ -107,23 +129,23 @@ export default function IntelligenceChart() {
             textAnchor="end"
             height={60}
           />
-          <YAxis 
-            domain={[0, 65]} 
+          <YAxis
+            domain={[0, 65]}
             ticks={[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65]}
             stroke="rgba(255,255,255,0.5)"
             tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 12 }}
             label={{ value: 'Artificial Analysis Intelligence Index', angle: -90, position: 'insideLeft', fill: 'rgba(255,255,255,0.7)', dy: 100 }}
           />
-          <Tooltip 
+          <Tooltip
             contentStyle={{ backgroundColor: '#0a0f1c', borderColor: 'rgba(0,255,204,0.3)', borderRadius: '8px' }}
             itemStyle={{ color: '#fff' }}
             labelFormatter={formatXAxis}
           />
-          <Legend 
-            verticalAlign="top" 
+          <Legend
+            verticalAlign="top"
             content={renderLegend}
           />
-          
+
           <Line hide={hiddenLines['Claude Opus 4.6 Adaptive']} type="stepAfter" dataKey="Claude Opus 4.6 Adaptive" stroke="#d97757" strokeWidth={3} dot={{ r: 4, fill: '#d97757' }} connectNulls />
           <Line hide={hiddenLines['DeepSeek-R1']} type="stepAfter" dataKey="DeepSeek-R1" stroke="#1d4ed8" strokeWidth={3} dot={{ r: 4, fill: '#1d4ed8' }} connectNulls />
           <Line hide={hiddenLines['DeepSeek-V3.2 Reasoning']} type="stepAfter" dataKey="DeepSeek-V3.2 Reasoning" stroke="#60a5fa" strokeWidth={3} dot={{ r: 4, fill: '#60a5fa' }} connectNulls />
